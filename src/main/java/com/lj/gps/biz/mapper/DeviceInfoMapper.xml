@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.gps.biz.mapper.DeviceInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.lj.gps.biz.entity.DeviceInfo" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <id column="SN" property="sn" jdbcType="VARCHAR" />
+    <result column="VID" property="vid" jdbcType="INTEGER" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, SN, VID, TYPE, CREATETIME, UPDATETIME
+  </sql>
+
+
+  <select id ="selectAllDevice"  resultType="com.lj.gps.biz.entity.DeviceInfo"
+          parameterType="com.lj.gps.biz.entity.User">
+    select * from T_DEVICE_INFO where 1 = 1
+    <if test="sn != null and sn != '' ">
+      and SN = #{sn,jdbcType=VARCHAR}
+    </if>
+    order by UPDATETIME desc
+  </select>
+
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.lj.gps.biz.entity.DeviceInfoKey" >
+    select
+    <include refid="Base_Column_List" />
+    from T_DEVICE_INFO
+    where ID = #{id,jdbcType=INTEGER}
+      and SN = #{sn,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.lj.gps.biz.entity.DeviceInfoKey" >
+    delete from T_DEVICE_INFO
+    where ID = #{id,jdbcType=INTEGER}
+      and SN = #{sn,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.lj.gps.biz.entity.DeviceInfo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into T_DEVICE_INFO (SN, VID, TYPE,
+      CREATETIME, UPDATETIME)
+    values (#{sn,jdbcType=VARCHAR}, #{vid,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR},
+      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.gps.biz.entity.DeviceInfo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into T_DEVICE_INFO
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sn != null" >
+        SN,
+      </if>
+      <if test="vid != null" >
+        VID,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="createtime != null" >
+        CREATETIME,
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sn != null" >
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="vid != null" >
+        #{vid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.gps.biz.entity.DeviceInfo" >
+    update T_DEVICE_INFO
+    <set >
+      <if test="vid != null" >
+        VID = #{vid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+      and SN = #{sn,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.gps.biz.entity.DeviceInfo" >
+    update T_DEVICE_INFO
+    set VID = #{vid,jdbcType=INTEGER},
+      TYPE = #{type,jdbcType=VARCHAR},
+      CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      UPDATETIME = #{updatetime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=INTEGER}
+      and SN = #{sn,jdbcType=VARCHAR}
+  </update>
+</mapper>

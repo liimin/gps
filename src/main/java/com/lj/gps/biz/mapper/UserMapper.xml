@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.gps.biz.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.lj.gps.biz.entity.User" >
+    <id column="USERID" property="userid" jdbcType="INTEGER" />
+    <result column="USERNAME" property="username" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="INTEGER" />
+    <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    USERID, USERNAME, PASSWORD, MOBILE, STATUS, CREATETIME, REMARK
+  </sql>
+
+
+  <select id ="selectAllUser"  resultType="com.lj.gps.biz.entity.User"
+          parameterType="com.lj.gps.biz.entity.User">
+    select * from B_USER where STATUS = 1
+    <if test="username != null and username != '' ">
+      and USERNAME = #{username,jdbcType=VARCHAR}
+    </if>
+    order by CREATETIME desc
+  </select>
+
+  <select id="getUserRoleModelByUserId" parameterType="Integer"
+          resultType="com.lj.gps.biz.model.UserRolesModel">
+    SELECT
+    o.USERID          AS userId,
+    GROUP_CONCAT(o.ROLEID)   AS userRoleIds,
+    GROUP_CONCAT(r.ROLENAME) AS userRoleNames
+    FROM B_USER_ROLE o LEFT JOIN B_ROLE r ON o.ROLEID = r.ROLEID
+    WHERE o.USERID = #{userId}
+  </select>
+
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from B_USER
+    where USERID = #{userid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from B_USER
+    where USERID = #{userid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lj.gps.biz.entity.User" >
+    <selectKey resultType="java.lang.Integer" keyProperty="userid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into B_USER (USERNAME, PASSWORD, MOBILE, 
+      STATUS, CREATETIME, REMARK
+      )
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.gps.biz.entity.User" >
+    <selectKey resultType="java.lang.Integer" keyProperty="userid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into B_USER
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="username != null" >
+        USERNAME,
+      </if>
+      <if test="password != null" >
+        PASSWORD,
+      </if>
+      <if test="mobile != null" >
+        MOBILE,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="createtime != null" >
+        CREATETIME,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.gps.biz.entity.User" >
+    update B_USER
+    <set >
+      <if test="username != null" >
+        USERNAME = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        MOBILE = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where USERID = #{userid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.gps.biz.entity.User" >
+    update B_USER
+    set USERNAME = #{username,jdbcType=VARCHAR},
+      PASSWORD = #{password,jdbcType=VARCHAR},
+      MOBILE = #{mobile,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=INTEGER},
+      CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      REMARK = #{remark,jdbcType=VARCHAR}
+    where USERID = #{userid,jdbcType=INTEGER}
+  </update>
+</mapper>
