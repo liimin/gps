@@ -16,7 +16,7 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="users"  highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+		<el-table :data="users"  highlight-current-row v-loading="tableLoading" @selection-change="selsChange" style="width: 100%;">
 			<el-table-column type="selection" width="55" :selectable='selectable'>
 			</el-table-column>
 			<el-table-column type="index" width="60">
@@ -56,16 +56,16 @@
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar">
-			<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
+			<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0" :loading="sending">批量删除</el-button>
 			<el-pagination layout="total,prev, pager, next" @current-change="handleCurrentChange" :page-size="pageSize" :total="total" style="float:right;">
 			</el-pagination>
 		</el-col>
 
 		<!--编辑界面-->
 		<el-dialog title="编辑" :visible.sync="editFormVisible"  :close-on-click-modal="false">
-			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
+			<el-form :model="editForm" label-width="80px" :rules="formRules" ref="editForm">
 				<el-form-item label="用户名" prop="username">
-					<el-input v-model="editForm.username" auto-complete="off" clearable></el-input>
+					<el-input v-model="editForm.username" auto-complete="off" :disabled="true"></el-input>
 				</el-form-item>
 				<el-form-item label="电话" prop="mobile">
 					<el-input v-model="editForm.mobile" auto-complete="off" clearable></el-input>
@@ -83,13 +83,13 @@
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="editFormVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
+				<el-button type="primary" @click.native="editSubmit" :loading="sending">提交</el-button>
 			</div>
 		</el-dialog>
 
 		<!--新增界面-->
 		<el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
-			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
+			<el-form :model="addForm" label-width="80px" :rules="formRules" ref="addForm">
 				<el-form-item label="用户名" prop="username">
 					<el-input v-model="addForm.username" auto-complete="off" clearable ></el-input>
 				</el-form-item>
@@ -115,7 +115,7 @@
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="addFormVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
+				<el-button type="primary" @click.native="addSubmit" :loading="sending">提交</el-button>
 			</div>
 		</el-dialog>
 	</section>
@@ -125,9 +125,13 @@
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
 	import { getUserList, removeUser, batchRemoveUser, editUser, addUser,getAllRoles } from '../../api/api';
+    import { mapGetters } from 'vuex'
 
 	export default {
-
+        computed: {
+            // 使用对象展开运算符将 getters 混入 computed 对象中
+            ...mapGetters(['sending','tableLoading'])
+        },
 		data() {
             var confirmPassword = (rule, value, callback) => {
                 if (value === '') {
@@ -156,16 +160,8 @@
 				total: 0,
 				currentPage: 1,
 				pageSize:10,
-				listLoading: false,
 				sels: [],//列表选中列
-
 				editFormVisible: false,//编辑界面是否显示
-				editLoading: false,
-				editFormRules: {
-					username: [
-						{ required: true, message: '请输入用户名', trigger: 'blur' }
-					]
-				},
 				//编辑界面数据
 				editForm: {
 					userId: 0,
@@ -179,12 +175,13 @@
 
 				addFormVisible: false,//新增界面是否显示
 				addLoading: false,
-				addFormRules: {
+				formRules: {
                     username: [
-						{ required: true, message: '请输入姓名', trigger: 'blur' }
+						{ required: true, message: '请输入用户名', trigger: 'blur' }
 					],
 					password:[
-                        {required: true, trigger: 'blur', validator: confirmPassword }
+                        {required: true, trigger: 'blur', validator: confirmPassword },
+                        {pattern:/^(\w){6,20}$/ , message: '只能输入6-20个字母、数字、下划线 ！', trigger: 'blur'}
 					],
                     password1:[
                         {required: true, trigger: 'blur', validator: confirmPassword2 }
@@ -303,9 +300,7 @@
                             delete para.password;
                             delete para.roleNames;
                             delete para.status;
-							//para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
 							editUser(para).then((res) => {
-								this.editLoading = false;
 								//NProgress.done();
 								this.$message({
 									message: '提交成功',
@@ -314,7 +309,8 @@
 								this.$refs['editForm'].resetFields();
 								this.editFormVisible = false;
 								this.getUsers();
-							});
+							}).catch(err=>{
+                            });
 						});
 					}
 				});
@@ -324,12 +320,9 @@
 				this.$refs.addForm.validate((valid) => {
 					if (valid) {
 						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.addLoading = true;
-							//NProgress.start();
 							let para = Object.assign({}, this.addForm);
 							addUser(para).then((res) => {
 								this.addLoading = false;
-								//NProgress.done();
 								this.$message({
 									message: '提交成功',
 									type: 'success'
@@ -337,7 +330,8 @@
 								this.$refs['addForm'].resetFields();
 								this.addFormVisible = false;
 								this.getUsers();
-							});
+							}).catch(err=>{
+                            });
 						});
 					}
 				});
@@ -351,7 +345,6 @@
 				this.$confirm('确认删除选中记录吗？', '提示', {
 					type: 'warning'
 				}).then(() => {
-					this.listLoading = true;
 					//NProgress.start();
 					let para = { ids: ids };
 					removeUser(para).then((res) => {

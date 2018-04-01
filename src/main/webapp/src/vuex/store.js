@@ -8,8 +8,10 @@ Vue.use(Vuex)
 // 应用初始状态
 const state = {
     count: 1,
-    color:"#fff"
-}
+    color:"#fff",
+    sending:false,
+    table_loading:false
+};
 
 // 定义所需的 mutations
 const mutations = {
@@ -21,6 +23,12 @@ const mutations = {
     },
     BGCOLOR(state,color){
         state.color=color;
+    },
+    SET_SENDING(state,isSending){
+        state.sending=isSending;
+    },
+    SET_TABLE_LOADING(state,isLoading){
+        state.table_loading=isLoading;
     }
 }
 
