@@ -2,17 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lj.gps.biz.mapper.RoleMapper" >
   <resultMap id="BaseResultMap" type="com.lj.gps.biz.entity.Role" >
-    <id column="ROLEID" property="roleid" jdbcType="INTEGER" />
+    <id column="ROLEID" property="roleid" jdbcType="BIGINT" />
     <result column="ROLENAME" property="rolename" jdbcType="VARCHAR" />
     <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
     <result column="REMARK" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    ROLEID, ROLENAME, CREATETIME, REMARK
+    ROLEID, ROLENAME, CREATETIME,UPDATETIME, REMARK
   </sql>
 
 
-  <select id ="selectAllRoles"  resultType="com.lj.gps.biz.entity.Role"
+  <select id ="selectAll"  resultType="com.lj.gps.biz.entity.Role"
           parameterType="com.lj.gps.biz.entity.Role">
     select * from B_ROLE WHERE  1=1
     <if test="rolename != null  and rolename != '' ">
@@ -22,23 +23,23 @@
   </select>
 
 
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from B_ROLE
-    where ROLEID = #{roleid,jdbcType=INTEGER}
+    where ROLEID = #{roleid,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from B_ROLE
-    where ROLEID = #{roleid,jdbcType=INTEGER}
+    where ROLEID = #{roleid,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.lj.gps.biz.entity.Role" >
-    <selectKey resultType="java.lang.Integer" keyProperty="roleid" order="AFTER" >
+    <selectKey resultType="java.lang.Long" keyProperty="roleid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into B_ROLE (ROLENAME, CREATETIME, REMARK
+    insert into B_ROLE (ROLENAME, CREATETIME,UPDATETIME, REMARK
       )
-    values (#{rolename,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}
+    values (#{rolename,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.lj.gps.biz.entity.Role" >
@@ -78,17 +79,21 @@
       <if test="createtime != null" >
         CREATETIME = #{createtime,jdbcType=TIMESTAMP},
       </if>
+      <if test="updatetime != null" >
+        UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
       <if test="remark != null" >
         REMARK = #{remark,jdbcType=VARCHAR},
       </if>
     </set>
-    where ROLEID = #{roleid,jdbcType=INTEGER}
+    where ROLEID = #{roleid,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lj.gps.biz.entity.Role" >
     update B_ROLE
     set ROLENAME = #{rolename,jdbcType=VARCHAR},
       CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
       REMARK = #{remark,jdbcType=VARCHAR}
-    where ROLEID = #{roleid,jdbcType=INTEGER}
+    where ROLEID = #{roleid,jdbcType=BIGINT}
   </update>
 </mapper>

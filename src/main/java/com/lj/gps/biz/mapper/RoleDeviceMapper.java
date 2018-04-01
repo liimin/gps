@@ -23,5 +23,5 @@ public interface RoleDeviceMapper {
      * @param roleId
      */
     @Delete("DELETE FROM B_ROLE_DEVICE WHERE ROLEID = #{roleId}")
-    void deleteRelationsByRoleId(@Param("roleId") int roleId);
+    void deleteRelationsByRoleId(@Param("roleId") Long roleId);
 }

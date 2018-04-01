@@ -19,5 +19,5 @@ public interface DeviceInfoMapper {
 
     int updateByPrimaryKey(DeviceInfo record);
 
-    List<DeviceInfo> selectAllDevice(DeviceInfo di);
+    List<DeviceInfo> selectAll(DeviceInfo di);
 }

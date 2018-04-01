@@ -3,35 +3,35 @@ package com.lj.gps.biz.entity;
 import java.io.Serializable;
 
 public class UserRole implements Serializable {
-    private Integer id;
+    private Long id;
 
-    private Integer roleid;
+    private Long roleid;
 
-    private Integer userid;
+    private Long userid;
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getRoleid() {
+    public Long getRoleid() {
         return roleid;
     }
 
-    public void setRoleid(Integer roleid) {
+    public void setRoleid(Long roleid) {
         this.roleid = roleid;
     }
 
-    public Integer getUserid() {
+    public Long getUserid() {
         return userid;
     }
 
-    public void setUserid(Integer userid) {
+    public void setUserid(Long userid) {
         this.userid = userid;
     }
 }

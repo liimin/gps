@@ -37,7 +37,7 @@ public class RoleService {
      * @return
      */
     public List<Role> getRoleList(Role role) {
-        return roleMapper.selectAllRoles(role);
+        return roleMapper.selectAll(role);
     }
 
     /**
@@ -47,7 +47,7 @@ public class RoleService {
      * @return
      */
     public Role getByName(String roleName) {
-        return roleMapper.getByName(roleName);
+        return roleMapper.selectByName(roleName);
     }
 
 
@@ -62,7 +62,7 @@ public class RoleService {
         addRoleDeviceRelations(role.getRoleid(),sns);
     }
 
-    private void addRoleDeviceRelations(int roleId,String sns){
+    private void addRoleDeviceRelations(Long roleId,String sns){
         String[] aSns=sns.split(",");
         String sn;
         RoleDevice roleDevice;
@@ -83,7 +83,7 @@ public class RoleService {
      * @param id
      * @return
      */
-    public Role getById(Integer id) {
+    public Role getById(Long id) {
         return roleMapper.selectByPrimaryKey(id);
     }
 
@@ -107,7 +107,7 @@ public class RoleService {
         if (StringUtils.isBlank(ids)) return;
         String[] ugIds = ids.split(",");
         for (String id : ugIds) {
-            int roleId=Integer.parseInt(id);
+            Long roleId=Long.parseLong(id);
             userRoleMapper.deleteRelationsByRoleId(roleId);
             roleDeviceMapper.deleteRelationsByRoleId(roleId);
             roleMapper.remove(roleId);
@@ -121,7 +121,7 @@ public class RoleService {
      * @return
      */
     public List<Role> getAllRoles() {
-        return roleMapper.selectAllRoles(null);
+        return roleMapper.selectAll(null);
     }
 
 }

@@ -36,7 +36,7 @@ public class DeviceService {
      * @return
      */
     public List<DeviceInfo> getUserList(DeviceInfo di) {
-        List<DeviceInfo> dList=deviceInfoMapper.selectAllDevice(di);
+        List<DeviceInfo> dList=deviceInfoMapper.selectAll(di);
         return dList;
     }
 }

@@ -3,31 +3,31 @@
 <mapper namespace="com.lj.gps.biz.mapper.UserRoleMapper" >
   <resultMap id="BaseResultMap" type="com.lj.gps.biz.entity.UserRole" >
     <id column="ID" property="id" jdbcType="INTEGER" />
-    <result column="ROLEID" property="roleid" jdbcType="INTEGER" />
-    <result column="USERID" property="userid" jdbcType="INTEGER" />
+    <result column="ROLEID" property="roleid" jdbcType="BIGINT" />
+    <result column="USERID" property="userid" jdbcType="BIGINT" />
   </resultMap>
   <sql id="Base_Column_List" >
     ID, ROLEID, USERID
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from B_USER_ROLE
     where ID = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from B_USER_ROLE
     where ID = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.lj.gps.biz.entity.UserRole" >
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into B_USER_ROLE (ROLEID, USERID)
     values (#{roleid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.lj.gps.biz.entity.UserRole" >
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into B_USER_ROLE
@@ -62,8 +62,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lj.gps.biz.entity.UserRole" >
     update B_USER_ROLE
-    set ROLEID = #{roleid,jdbcType=INTEGER},
-      USERID = #{userid,jdbcType=INTEGER}
-    where ID = #{id,jdbcType=INTEGER}
+    set ROLEID = #{roleid,jdbcType=BIGINT},
+      USERID = #{userid,jdbcType=BIGINT}
+    where ID = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

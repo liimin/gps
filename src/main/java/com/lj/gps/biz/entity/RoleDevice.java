@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class RoleDevice implements Serializable {
     private Long id;
 
-    private Integer roleid;
+    private Long roleid;
 
     private String sn;
 
@@ -19,11 +19,11 @@ public class RoleDevice implements Serializable {
         this.id = id;
     }
 
-    public Integer getRoleid() {
+    public Long getRoleid() {
         return roleid;
     }
 
-    public void setRoleid(Integer roleid) {
+    public void setRoleid(Long roleid) {
         this.roleid = roleid;
     }
 

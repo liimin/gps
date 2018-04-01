@@ -35,7 +35,7 @@ public class UserService {
      * @param id
      * @return
      */
-    public User selectByPrimaryKey(Integer id) {
+    public User selectByPrimaryKey(Long id) {
         return userMapper.selectByPrimaryKey(id);
     }
 
@@ -46,10 +46,10 @@ public class UserService {
      * @return
      */
     public List<User> getUserList(User u) {
-        List<User> uList=userMapper.selectAllUser(u);
+        List<User> uList=userMapper.selectAll(u);
         UserRolesModel roleModel = null;
         for (User user : uList) {
-            roleModel = userMapper.getUserRoleModelByUserId(user.getUserid());
+            roleModel = userMapper.selectUserRoleRelationsByUserId(user.getUserid());
            // user.setPassword(null);
             if (roleModel != null) {
                 user.setRoleNames(roleModel.getUserRoleNames());
@@ -66,7 +66,7 @@ public class UserService {
      * @return
      */
     public User getUserByUsername(String username) {
-        return userMapper.getUserByUsername(username);
+        return userMapper.selectByUsername(username);
     }
 
     /**
@@ -101,7 +101,7 @@ public class UserService {
             String[] aRoleIds = user.getRoleIds().split(",");
             for (String roleId : aRoleIds) {
                 UserRole ur = new UserRole();
-                ur.setRoleid(Integer.parseInt(roleId));
+                ur.setRoleid(Long.parseLong(roleId));
                 ur.setUserid(user.getUserid());
                 userRoleMapper.insert(ur);
             }
@@ -116,9 +116,11 @@ public class UserService {
     public void removeUserById(String ids) {
         if (StringUtils.isBlank(ids)) return;
         String[] ugIds = ids.split(",");
+        Long userId;
         for (String id : ugIds) {
-            userRoleMapper.deleteRelationsByUserId(Integer.parseInt(id));
-            userMapper.deleteByPrimaryKey(Integer.parseInt(id));
+            userId=Long.parseLong(id);
+            userRoleMapper.deleteRelationsByUserId(userId);
+            userMapper.deleteByPrimaryKey(userId);
         }
     }
 }

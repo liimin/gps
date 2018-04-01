@@ -4,21 +4,23 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Role implements Serializable {
-    private Integer roleid;
+    private Long roleid;
 
     private String rolename;
 
     private Date createtime;
 
+    private Date updatetime;
+
     private String remark;
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getRoleid() {
+    public Long getRoleid() {
         return roleid;
     }
 
-    public void setRoleid(Integer roleid) {
+    public void setRoleid(Long roleid) {
         this.roleid = roleid;
     }
 
@@ -44,5 +46,13 @@ public class Role implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public Date getUpdatetime() {
+        return updatetime;
+    }
+
+    public void setUpdatetime(Date updatetime) {
+        this.updatetime = updatetime;
     }
 }

@@ -14,7 +14,7 @@
   </sql>
 
 
-  <select id ="selectAllDevice"  resultType="com.lj.gps.biz.entity.DeviceInfo"
+  <select id ="selectAll"  resultType="com.lj.gps.biz.entity.DeviceInfo"
           parameterType="com.lj.gps.biz.entity.User">
     select * from T_DEVICE_INFO where 1 = 1
     <if test="sn != null and sn != '' ">
