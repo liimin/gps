@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class User implements Serializable {
-    private Long userid;
+    private Integer userid;
 
     private String username;
 
@@ -21,6 +21,7 @@ public class User implements Serializable {
 
     private String remark;
 
+
     @Transient
     private String roleNames;
 
@@ -29,11 +30,11 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Long getUserid() {
+    public Integer getUserid() {
         return userid;
     }
 
-    public void setUserid(Long userid) {
+    public void setUserid(Integer userid) {
         this.userid = userid;
     }
 
@@ -77,6 +78,14 @@ public class User implements Serializable {
         this.createtime = createtime;
     }
 
+    public Date getUpdatetime() {
+        return updatetime;
+    }
+
+    public void setUpdatetime(Date updatetime) {
+        this.updatetime = updatetime;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -99,13 +108,5 @@ public class User implements Serializable {
 
     public void setRoleIds(String roleIds) {
         this.roleIds = roleIds;
-    }
-
-    public Date getUpdatetime() {
-        return updatetime;
-    }
-
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
     }
 }

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Role implements Serializable {
-    private Long roleid;
+    private Integer roleid;
 
     private String rolename;
 
@@ -16,11 +16,11 @@ public class Role implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Long getRoleid() {
+    public Integer getRoleid() {
         return roleid;
     }
 
-    public void setRoleid(Long roleid) {
+    public void setRoleid(Integer roleid) {
         this.roleid = roleid;
     }
 
@@ -40,19 +40,19 @@ public class Role implements Serializable {
         this.createtime = createtime;
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
-
     public Date getUpdatetime() {
         return updatetime;
     }
 
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 }

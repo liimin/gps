@@ -58,11 +58,12 @@ public class RoleService {
      */
     public void addRole(Role role,String sns) {
         role.setCreatetime(new Date());
+        role.setUpdatetime(new Date());
         roleMapper.insert(role);
         addRoleDeviceRelations(role.getRoleid(),sns);
     }
 
-    private void addRoleDeviceRelations(Long roleId,String sns){
+    private void addRoleDeviceRelations(Integer roleId,String sns){
         String[] aSns=sns.split(",");
         String sn;
         RoleDevice roleDevice;
@@ -83,7 +84,7 @@ public class RoleService {
      * @param id
      * @return
      */
-    public Role getById(Long id) {
+    public Role getById(Integer id) {
         return roleMapper.selectByPrimaryKey(id);
     }
 
@@ -93,6 +94,7 @@ public class RoleService {
      * @param role
      */
     public void updateRole(Role role,String sns) {
+        role.setUpdatetime(new Date());
         roleMapper.updateByPrimaryKeySelective(role);
         roleDeviceMapper.deleteRelationsByRoleId(role.getRoleid());
         addRoleDeviceRelations(role.getRoleid(),sns);
@@ -107,7 +109,7 @@ public class RoleService {
         if (StringUtils.isBlank(ids)) return;
         String[] ugIds = ids.split(",");
         for (String id : ugIds) {
-            Long roleId=Long.parseLong(id);
+            Integer roleId=Integer.parseInt(id);
             userRoleMapper.deleteRelationsByRoleId(roleId);
             roleDeviceMapper.deleteRelationsByRoleId(roleId);
             roleMapper.remove(roleId);

@@ -21,7 +21,7 @@
 			</el-table-column>
 			<el-table-column type="index" width="60">
 			</el-table-column>
-			<el-table-column prop="username" label="用户名" width="160">
+			<el-table-column prop="username" label="用户名" width="120">
 				<template slot-scope="scope">
 					<i class="fa fa-user-o" aria-hidden="true" v-if="scope.row.userid==10000"></i>
 					<span style="margin-left: 5px">{{ scope.row.username }}</span>
@@ -36,6 +36,13 @@
 				</template>
 			</el-table-column>
 			<el-table-column prop="roleNames" label="角色" width="160" sortable>
+			</el-table-column>
+
+			<el-table-column prop="createtime" label="更新时间" width="200" sortable>
+				<template slot-scope="scope">
+					<i class="el-icon-time" ></i>
+					<span style="margin-left: 5px">{{ scope.row.updatetime }}</span>
+				</template>
 			</el-table-column>
 			<el-table-column prop="remark" label="备注" min-width="120" sortable>
 			</el-table-column>

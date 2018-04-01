@@ -35,7 +35,7 @@ public class UserService {
      * @param id
      * @return
      */
-    public User selectByPrimaryKey(Long id) {
+    public User selectByPrimaryKey(Integer id) {
         return userMapper.selectByPrimaryKey(id);
     }
 
@@ -77,6 +77,7 @@ public class UserService {
     public void addUser(User user) {
         user.setStatus(Constants.USER_AVAILABLE_STATUS);
         user.setCreatetime(new Date());
+        user.setUpdatetime(new Date());
         user.setPassword(EncryptUtil.PBEEncrypt(user.getPassword()));
         userMapper.insert(user);
         updateUserRole(user);
@@ -91,6 +92,7 @@ public class UserService {
         if (StringUtils.isNotEmpty(user.getPassword())) {
             user.setPassword(EncryptUtil.PBEEncrypt(user.getPassword()));
         }
+        user.setUpdatetime(new Date());
         userMapper.updateByPrimaryKeySelective(user);
         updateUserRole(user);
     }
@@ -101,7 +103,7 @@ public class UserService {
             String[] aRoleIds = user.getRoleIds().split(",");
             for (String roleId : aRoleIds) {
                 UserRole ur = new UserRole();
-                ur.setRoleid(Long.parseLong(roleId));
+                ur.setRoleid(Integer.parseInt(roleId));
                 ur.setUserid(user.getUserid());
                 userRoleMapper.insert(ur);
             }
@@ -116,9 +118,9 @@ public class UserService {
     public void removeUserById(String ids) {
         if (StringUtils.isBlank(ids)) return;
         String[] ugIds = ids.split(",");
-        Long userId;
+        Integer userId;
         for (String id : ugIds) {
-            userId=Long.parseLong(id);
+            userId=Integer.parseInt(id);
             userRoleMapper.deleteRelationsByUserId(userId);
             userMapper.deleteByPrimaryKey(userId);
         }

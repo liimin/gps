@@ -33,6 +33,12 @@
 					<span style="margin-left: 5px">{{ scope.row.createtime }}</span>
 				</template>
 			</el-table-column>
+			<el-table-column prop="createtime" label="更新时间" width="200" sortable>
+				<template slot-scope="scope">
+					<i class="el-icon-time" ></i>
+					<span style="margin-left: 5px">{{ scope.row.updatetime }}</span>
+				</template>
+			</el-table-column>
 			<el-table-column prop="remark" label="备注" min-width="220" sortable>
 			</el-table-column>
 			<el-table-column label="操作" width="160">
