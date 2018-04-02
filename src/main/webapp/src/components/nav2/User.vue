@@ -43,7 +43,6 @@
 </template>
 <script>
     import {getUserList} from '../../api/api';
-    //import NProgress from 'nprogress'
     export default {
         data() {
             return {
@@ -65,11 +64,9 @@
                     name: this.filters.name
                 };
                 this.loading = true;
-                //NProgress.start();
                 getUserList(para).then((res) => {
                     this.users = res.data.data;
                     this.loading = false;
-                    //NProgress.done();
                 });
             }
         },

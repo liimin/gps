@@ -20,7 +20,7 @@
 <script>
   import { requestLogin } from '../api/api';
   import StarLine from '../components/public/StarLine.vue'
-  //import NProgress from 'nprogress'
+  import { mapGetters } from 'vuex'
   export default {
     data() {
       return {
@@ -52,11 +52,9 @@
           if (valid) {
             //_this.$router.replace('/table');
             this.logining = true;
-            //NProgress.start();
             var loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass };
             requestLogin(loginParams).then(result => {
               this.logining = false;
-              //NProgress.done();
               let { message, returnCode, data } = result;
               if (returnCode !== "0") {
                 this.$message({

@@ -123,8 +123,7 @@
 
 <script>
 	import util from '../../common/js/util'
-	//import NProgress from 'nprogress'
-	import { getUserList, removeUser, batchRemoveUser, editUser, addUser,getAllRoles } from '../../api/api';
+	import { getUserList, removeUser, editUser, addUser,getAllRoles } from '../../api/api';
     import { mapGetters } from 'vuex'
 
 	export default {
@@ -221,13 +220,9 @@
 					name: this.filters.name,
 					pageSize:this.pageSize
 				};
-				this.listLoading = true;
-				//NProgress.start();
                 getUserList(para).then((res) => {
 					this.total = res.data.total;
 					this.users = res.data.data;
-					this.listLoading = false;
-					//NProgress.done();
 				});
 			},
 
@@ -237,8 +232,6 @@
                    	call && call();
                     return
                 };
-				this.listLoading = true;
-                //NProgress.start();
                 getAllRoles({}).then((res) => {
                     this.roles = res.data.data;
                     this.listLoading = false;
@@ -251,12 +244,8 @@
 				this.$confirm('确认删除该记录吗?', '提示', {
 					type: 'warning'
 				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
 					let para = { ids: row.userid };
 					removeUser(para).then((res) => {
-						this.listLoading = false;
-						//NProgress.done();
 						this.$message({
 							message: '删除成功',
 							type: 'success'
@@ -293,15 +282,13 @@
 					if (valid) {
 						this.$confirm('确认提交吗？', '提示', {}).then(() => {
 							this.editLoading = true;
-							//NProgress.start();
 							let para = Object.assign({}, this.editForm);
-
+							return;
                             delete para.createtime;
                             delete para.password;
                             delete para.roleNames;
                             delete para.status;
 							editUser(para).then((res) => {
-								//NProgress.done();
 								this.$message({
 									message: '提交成功',
 									type: 'success'
@@ -345,11 +332,9 @@
 				this.$confirm('确认删除选中记录吗？', '提示', {
 					type: 'warning'
 				}).then(() => {
-					//NProgress.start();
 					let para = { ids: ids };
 					removeUser(para).then((res) => {
 						this.listLoading = false;
-						//NProgress.done();
 						this.$message({
 							message: '删除成功',
 							type: 'success'

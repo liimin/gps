@@ -22,7 +22,7 @@
             </el-transfer>
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" @click.native="handleEdit" :loading="saving">立即保存</el-button>
+            <el-button type="primary" @click.native="handleEdit" :loading="sending">立即保存</el-button>
             <el-button @click.native.prevent>取消</el-button>
         </el-form-item>
     </el-form>
@@ -42,10 +42,13 @@
 </style>
 <script>
     import { editRole,getDeviceList } from '../../api/api';
+    import { mapGetters } from 'vuex'
     export default {
+        computed: {
+            ...mapGetters(['sending'])
+        },
         data() {
             return {
-                saving:false,
                 deviceData:[],
                 editForm: {
                     rolename: '',
@@ -74,10 +77,9 @@
                     currentPage: this.page,
                     pageSize:this.pageSize
                 };
-                //NProgress.start();
                 getDeviceList(para).then((res) => {
-                    var aDevices=res.data.data;
-                    var obj=null;
+                    let aDevices=res.data.data;
+                    let obj=null;
                     for (let i = 0,j=aDevices.length; i <j ; i++) {
                         obj=aDevices[i];
                         this.deviceData.push({
@@ -85,16 +87,13 @@
                             label: `SN  ${ obj.sn }`
                         });
                     }
-                    //NProgress.done();
                 });
             },
 
             handleEdit(){
-                this.saving = true;
                 let para =Object.assign({}, this.editForm);
                 para.sns=this.result.map(item => item).toString();
                 editRole(para).then((res) => {
-                    this.saving = false;
                     this.$message({
                         message: '修改成功',
                         type: 'success'

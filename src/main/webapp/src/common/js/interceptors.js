@@ -3,13 +3,28 @@ import axios from 'axios'
 import { Loading, Message } from 'element-ui'
 import qs from 'qs';
 import store from '@/vuex/store';
+import NProgress from 'nprogress';
 // 超时时间
 axios.defaults.timeout = 5000;
 // http请求拦截器
 var loadinginstace;
+var process={
+    begin(){
+        NProgress.start();
+        store.commit('SET_SENDING',true);
+        store.commit('SET_TABLE_LOADING',true);
+    },
+    end(){
+        NProgress.done();
+        store.commit('SET_SENDING',false);
+        store.commit('SET_TABLE_LOADING',false);
+    }
+};
+
 axios.interceptors.request.use(config => {
-    store.commit('SET_SENDING',true);
-    store.commit('SET_TABLE_LOADING',true);
+    process.begin();
+    //store.commit('SET_SENDING',true);
+    //store.commit('SET_TABLE_LOADING',true);
     // element ui Loading方法
     //loadinginstace = Loading.service({ fullscreen: true });
     /*if (store.state.token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
@@ -23,15 +38,13 @@ axios.interceptors.request.use(config => {
     Message.error({
         message: '加载超时'
     });
-    store.commit('SET_TABLE_LOADING',false);
-    store.commit('SET_SENDING',false);
+    process.end();
     return Promise.reject(error)
 })
 // http响应拦截器
 axios.interceptors.response.use(response  => {// 响应成功关闭loading
     //loadinginstace.close();
-    store.commit('SET_SENDING',false);
-    store.commit('SET_TABLE_LOADING',false);
+    process.end();
     if(response.data){
         if( response.data.returnCode !='0'  && typeof response.data.returnCode!='undefined'){
             Message.error({
@@ -44,8 +57,7 @@ axios.interceptors.response.use(response  => {// 响应成功关闭loading
     }
     return response
 }, error => {
-    store.commit('SET_SENDING',false);
-    store.commit('SET_TABLE_LOADING',false);
+    process.end();
     //loadinginstace.close();
     Message.error({
         message: '加载失败'
@@ -62,7 +74,6 @@ axios.interceptors.response.use(response  => {// 响应成功关闭loading
         }
     }
     return Promise.reject(error)   // 返回接口返回的错误信息
-    //return Promise.reject(error)
 });
 
 export default axios

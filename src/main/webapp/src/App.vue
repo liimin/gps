@@ -1,7 +1,6 @@
 <template>
 	<div id="app">
-		<transition name="fade"
-		            mode="out-in">
+		<transition name="" mode="out-in">
 			<router-view></router-view>
 		</transition>
 	</div>
@@ -53,15 +52,5 @@ body {
 	.el-form-item {
 		margin-bottom: 10px;
 	}
-}
-
-.fade-enter-active,
-.fade-leave-active {
-	transition: all .2s ease;
-}
-
-.fade-enter,
-.fade-leave-active {
-	opacity: 0;
 }
 </style>

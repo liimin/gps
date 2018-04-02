@@ -22,7 +22,7 @@
             </el-transfer>
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" @click.native="handleAdd" :loading="saving">立即保存</el-button>
+            <el-button type="primary" @click.native="handleAdd" :loading="sending">立即保存</el-button>
             <el-button @click.native.prevent>取消</el-button>
         </el-form-item>
     </el-form>
@@ -42,7 +42,11 @@
 </style>
 <script>
     import { getDeviceList,addRole } from '../../api/api';
+    import { mapGetters } from 'vuex';
     export default {
+        computed: {
+            ...mapGetters(['sending'])
+        },
         data() {
             const generateData = _ => {
                 const data = [];
@@ -56,7 +60,6 @@
                 return data;
             };
             return {
-                saving:false,
                 deviceData:[],//generateData(),
                 addForm: {
                     rolename: '',
@@ -100,12 +103,9 @@
             },
 
             handleAdd(){
-                this.saving = true;
                 let para =Object.assign({}, this.addForm);
                 para.sns=this.result.map(item => item).toString();
                 addRole(para).then((res) => {
-                    this.listLoading = false;
-                    //NProgress.done();
                     this.$message({
                         message: '新增成功',
                         type: 'success'

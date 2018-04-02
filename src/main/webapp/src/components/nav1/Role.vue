@@ -16,7 +16,7 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="roleList"  highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+		<el-table :data="roleList"  highlight-current-row v-loading="tableLoading" @selection-change="selsChange" style="width: 100%;">
 			<el-table-column type="selection" width="55" :selectable='selectable'>
 			</el-table-column>
 			<el-table-column type="index" width="60">
@@ -44,14 +44,14 @@
 			<el-table-column label="操作" width="160">
 				<template slot-scope="scope">
 					<el-button type="primary"  @click="handleEdit(scope.$index, scope.row)" icon="el-icon-edit" :disabled="scope.row.roleid=='10000'" ></el-button>
-					<el-button type="danger" icon="el-icon-delete"  @click="handleDel(scope.$index, scope.row)" :loading="deleting" :disabled="scope.row.roleid=='10000'"></el-button>
+					<el-button type="danger" icon="el-icon-delete"  @click="handleDel(scope.$index, scope.row)" :loading="sending" :disabled="scope.row.roleid=='10000'"></el-button>
 				</template>
 			</el-table-column>
 		</el-table>
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar">
-			<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0" :loading="deleting">批量删除</el-button>
+			<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0" :loading="sending">批量删除</el-button>
 			<el-pagination layout="total,prev, pager, next" @current-change="handleCurrentChange" :page-size="pageSize" :total="total" style="float:right;">
 			</el-pagination>
 		</el-col>
@@ -60,12 +60,14 @@
 
 <script>
 	import util from '../../common/js/util'
-	//import NProgress from 'nprogress'
 	import { getRoleList, removeRole } from '../../api/api';
+    import { mapGetters } from 'vuex';
 	export default {
+        computed: {
+            ...mapGetters(['sending','tableLoading'])
+        },
 		data() {
 			return {
-                deleting:false,
 				filters: {
                     rolename: ''
 				},
@@ -74,7 +76,6 @@
 				total: 0,
 				page: 1,
 				pageSize:10,
-				listLoading: false,
 			}
 		},
 		methods: {
@@ -95,11 +96,9 @@
                     rolename: this.filters.rolename,
 					pageSize:this.pageSize
 				};
-				this.listLoading = true;
                 getRoleList(para).then((res) => {
 					this.total = res.data.total;
 					this.roleList = res.data.data;
-					this.listLoading = false;
 				});
 			},
 
@@ -108,10 +107,8 @@
 				this.$confirm('确认删除该记录吗?', '提示', {
 					type: 'warning'
 				}).then(() => {
-					this.deleting = true;
 					let para = { ids: row.roleid };
                     removeRole(para).then((res) => {
-						this.deleting = false;
 						this.$message({
 							message: '删除成功',
 							type: 'success'
@@ -136,10 +133,8 @@
 				this.$confirm('确认删除选中记录吗？', '提示', {
 					type: 'warning'
 				}).then(() => {
-					this.deleting = true;
 					let para = { ids: ids };
                     removeRole(para).then((res) => {
-						this.deleting = false;
 						this.$message({
 							message: '删除成功',
 							type: 'success'
