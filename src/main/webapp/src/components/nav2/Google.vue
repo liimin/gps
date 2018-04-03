@@ -2,7 +2,7 @@
 	<gmap-map
 			:center="center"
 			:zoom="7"
-			style="width: 100%; height: 100%"
+			style="width: 100%; height: 800px"
 	>
 		<gmap-marker
 				:key="index"
@@ -28,6 +28,7 @@
             // libraries: 'places', //// If you need to use place input
         }
     });
+
     export default {
         data () {
             return {

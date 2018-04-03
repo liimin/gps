@@ -23,8 +23,18 @@
 		<el-col :span="24" class="main">
 			<aside :class="collapsed?'menu-collapsed':'menu-expanded'">
 				<!--导航菜单-->
-				<el-menu :default-active="$route.path" class="el-menu-vertical-demo" id="lastclass" @open="handleopen" @close="handleclose" @select="handleselect"
-					 unique-opened router v-show="!collapsed">
+				<el-menu :default-active="$route.path"
+						 class="el-menu-vertical-demo"
+						 id="lastclass"
+						 @open="handleopen"
+						 @close="handleclose"
+						 @select="handleselect"
+					     unique-opened
+						 router
+						 v-show="!collapsed"
+						 background-color="#545c64"
+						 text-color="#fff"
+						 active-text-color="#ffd04b">
 					<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
 						<el-submenu :index="index+''" v-if="!item.leaf">
 							<template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
@@ -135,12 +145,10 @@
 			if (user) {
 				user = JSON.parse(user);
 				this.sysUserName = user.username || '';
-				this.sysUserAvatar = user.avatar || 'https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png';
+				this.sysUserAvatar = user.avatar || '../assets/user.png';
 			}
 		}
 	}
-
-</script>
 
 <style scoped lang="scss">
 	/* 可以设置不同的进入和离开动画 */
@@ -164,7 +172,7 @@
 		.header {
 			height: 60px;
 			line-height: 60px;
-			background: #20a0ff;
+			background: #293c55;
 			color:#fff;
 			.userinfo {
 				text-align: right;
