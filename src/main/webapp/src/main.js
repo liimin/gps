@@ -19,6 +19,7 @@ import './common/js/interceptors'
 
 import DrawerLayout from 'vue-drawer-layout'
 
+
 Vue.use(DrawerLayout)
 
 Vue.use(ElementUI);

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.gps.biz.mapper.HisGpsMapper" >
+  <resultMap id="BaseResultMap" type="com.lj.gps.biz.entity.HisGps" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="SN" property="sn" jdbcType="VARCHAR" />
+    <result column="WE" property="we" jdbcType="INTEGER" />
+    <result column="LONGITUDE" property="longitude" jdbcType="INTEGER" />
+    <result column="NS" property="ns" jdbcType="INTEGER" />
+    <result column="LATITUDE" property="latitude" jdbcType="INTEGER" />
+    <result column="GPSTIME" property="gpstime" jdbcType="TIMESTAMP" />
+    <result column="ALTITUDE" property="altitude" jdbcType="INTEGER" />
+    <result column="SPEED" property="speed" jdbcType="INTEGER" />
+    <result column="DIRECT" property="direct" jdbcType="INTEGER" />
+    <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, SN, WE, LONGITUDE, NS, LATITUDE, GPSTIME, ALTITUDE, SPEED, DIRECT, CREATETIME,
+    UPDATETIME
+  </sql>
+
+  <sql id="His_Column_List" >
+    ID, SN, WE, LONGITUDE, NS, LATITUDE, GPSTIME, ALTITUDE, SPEED, DIRECT
+  </sql>
+
+  <select id="selectBySn" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="His_Column_List" />
+    from T_HIS_GPS
+    where SN = #{sn,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_HIS_GPS
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from T_HIS_GPS
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lj.gps.biz.entity.HisGps" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into T_HIS_GPS (SN, WE, LONGITUDE, 
+      NS, LATITUDE, GPSTIME, 
+      ALTITUDE, SPEED, DIRECT, 
+      CREATETIME, UPDATETIME)
+    values (#{sn,jdbcType=VARCHAR}, #{we,jdbcType=INTEGER}, #{longitude,jdbcType=INTEGER}, 
+      #{ns,jdbcType=INTEGER}, #{latitude,jdbcType=INTEGER}, #{gpstime,jdbcType=TIMESTAMP}, 
+      #{altitude,jdbcType=INTEGER}, #{speed,jdbcType=INTEGER}, #{direct,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.gps.biz.entity.HisGps" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into T_HIS_GPS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sn != null" >
+        SN,
+      </if>
+      <if test="we != null" >
+        WE,
+      </if>
+      <if test="longitude != null" >
+        LONGITUDE,
+      </if>
+      <if test="ns != null" >
+        NS,
+      </if>
+      <if test="latitude != null" >
+        LATITUDE,
+      </if>
+      <if test="gpstime != null" >
+        GPSTIME,
+      </if>
+      <if test="altitude != null" >
+        ALTITUDE,
+      </if>
+      <if test="speed != null" >
+        SPEED,
+      </if>
+      <if test="direct != null" >
+        DIRECT,
+      </if>
+      <if test="createtime != null" >
+        CREATETIME,
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sn != null" >
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="we != null" >
+        #{we,jdbcType=INTEGER},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=INTEGER},
+      </if>
+      <if test="ns != null" >
+        #{ns,jdbcType=INTEGER},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=INTEGER},
+      </if>
+      <if test="gpstime != null" >
+        #{gpstime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="altitude != null" >
+        #{altitude,jdbcType=INTEGER},
+      </if>
+      <if test="speed != null" >
+        #{speed,jdbcType=INTEGER},
+      </if>
+      <if test="direct != null" >
+        #{direct,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.gps.biz.entity.HisGps" >
+    update T_HIS_GPS
+    <set >
+      <if test="sn != null" >
+        SN = #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="we != null" >
+        WE = #{we,jdbcType=INTEGER},
+      </if>
+      <if test="longitude != null" >
+        LONGITUDE = #{longitude,jdbcType=INTEGER},
+      </if>
+      <if test="ns != null" >
+        NS = #{ns,jdbcType=INTEGER},
+      </if>
+      <if test="latitude != null" >
+        LATITUDE = #{latitude,jdbcType=INTEGER},
+      </if>
+      <if test="gpstime != null" >
+        GPSTIME = #{gpstime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="altitude != null" >
+        ALTITUDE = #{altitude,jdbcType=INTEGER},
+      </if>
+      <if test="speed != null" >
+        SPEED = #{speed,jdbcType=INTEGER},
+      </if>
+      <if test="direct != null" >
+        DIRECT = #{direct,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.gps.biz.entity.HisGps" >
+    update T_HIS_GPS
+    set SN = #{sn,jdbcType=VARCHAR},
+      WE = #{we,jdbcType=INTEGER},
+      LONGITUDE = #{longitude,jdbcType=INTEGER},
+      NS = #{ns,jdbcType=INTEGER},
+      LATITUDE = #{latitude,jdbcType=INTEGER},
+      GPSTIME = #{gpstime,jdbcType=TIMESTAMP},
+      ALTITUDE = #{altitude,jdbcType=INTEGER},
+      SPEED = #{speed,jdbcType=INTEGER},
+      DIRECT = #{direct,jdbcType=INTEGER},
+      CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      UPDATETIME = #{updatetime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

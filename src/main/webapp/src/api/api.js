@@ -29,3 +29,7 @@ export const removeRole = params => { return axios.post(`${base}/role/remove`, p
 
 //device
 export const getDeviceList = params => { return axios.post(`${base}/device/getDeviceList`, params); };
+
+//gps
+export const getRtBySn = params => { return axios.post(`${base}/track/getRtBySn`, params); };
+export const getHisBySn = params => { return axios.post(`${base}/track/getHisBySn`, params); };

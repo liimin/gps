@@ -2,32 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lj.gps.biz.mapper.RoleDeviceMapper" >
   <resultMap id="BaseResultMap" type="com.lj.gps.biz.entity.RoleDevice" >
-    <id column="ID" property="id" jdbcType="BIGINT" />
-    <result column="ROLEID" property="roleid" jdbcType="BIGINT" />
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="ROLEID" property="roleid" jdbcType="INTEGER" />
     <result column="SN" property="sn" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     ID, ROLEID, SN
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from B_ROLE_DEVICE
-    where ID = #{id,jdbcType=BIGINT}
+    where ID = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from B_ROLE_DEVICE
-    where ID = #{id,jdbcType=BIGINT}
+    where ID = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.lj.gps.biz.entity.RoleDevice" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into B_ROLE_DEVICE (ROLEID, SN)
-    values (#{roleid,jdbcType=BIGINT}, #{sn,jdbcType=VARCHAR})
+    values (#{roleid,jdbcType=INTEGER}, #{sn,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lj.gps.biz.entity.RoleDevice" >
-    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into B_ROLE_DEVICE
@@ -41,7 +41,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="roleid != null" >
-        #{roleid,jdbcType=BIGINT},
+        #{roleid,jdbcType=INTEGER},
       </if>
       <if test="sn != null" >
         #{sn,jdbcType=VARCHAR},
@@ -52,18 +52,18 @@
     update B_ROLE_DEVICE
     <set >
       <if test="roleid != null" >
-        ROLEID = #{roleid,jdbcType=BIGINT},
+        ROLEID = #{roleid,jdbcType=INTEGER},
       </if>
       <if test="sn != null" >
         SN = #{sn,jdbcType=VARCHAR},
       </if>
     </set>
-    where ID = #{id,jdbcType=BIGINT}
+    where ID = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lj.gps.biz.entity.RoleDevice" >
     update B_ROLE_DEVICE
-    set ROLEID = #{roleid,jdbcType=BIGINT},
+    set ROLEID = #{roleid,jdbcType=INTEGER},
       SN = #{sn,jdbcType=VARCHAR}
-    where ID = #{id,jdbcType=BIGINT}
+    where ID = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -11,7 +11,7 @@ import AMap from './components/nav2/AMap.vue'
 import Google from './components/nav2/Google.vue'
 //import Bing from './components/nav2/Bing.vue'
 /*import Page6 from './components/nav3/Page6.vue'*/
-import echarts from './components/charts/echarts.vue'
+//import echarts from './components/charts/echarts.vue'
 import RoleEdit from './views/Role/RoleEdit.vue'
 import RoleAdd from './views/Role/RoleAdd.vue'
 import Monitor from './views/Monitor/Monitor.vue'
@@ -54,7 +54,7 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: '',
+        name: 'OTHERS',
         iconCls: 'fa fa-address-card',
         //leaf: true,//只有一个节点
         children: [
@@ -74,7 +74,7 @@ let routes = [
         name: 'Charts',
         iconCls: 'fa fa-bar-chart',
         children: [
-            { path: '/echarts', component: echarts, name: 'echarts' }
+           // { path: '/echarts', component: echarts, name: 'echarts' }
         ]
     },
     {

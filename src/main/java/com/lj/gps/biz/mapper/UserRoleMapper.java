@@ -7,24 +7,22 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface UserRoleMapper {
-    int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(UserRole record);
 
     int insertSelective(UserRole record);
 
-    UserRole selectByPrimaryKey(Long id);
+    UserRole selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(UserRole record);
 
-    int updateByPrimaryKey(UserRole record);
-
-    /**
+    int updateByPrimaryKey(UserRole record); /**
      * 通过登录用户ID 查询用户对应权限
      *
      * @return
      */
-    List<UserRole> selectListByUserId(@Param("userId") Long userId);
+    List<UserRole> selectListByUserId(@Param("userId") Integer userId);
 
     /**
      * 根据账号id删除 账号角色关系
@@ -32,7 +30,7 @@ public interface UserRoleMapper {
      * @param userId
      */
     @Delete("DELETE FROM B_USER_ROLE WHERE USERID = #{userId}")
-    void deleteRelationsByUserId(@Param("userId") Long userId);
+    void deleteRelationsByUserId(@Param("userId") Integer userId);
 
     /**
      * 根据角色id删除 账号角色关系
@@ -40,5 +38,7 @@ public interface UserRoleMapper {
      * @param roleId
      */
     @Delete("DELETE FROM B_USER_ROLE WHERE ROLEID = #{roleId}")
-    void deleteRelationsByRoleId(@Param("roleId") Long roleId);
+    void deleteRelationsByRoleId(@Param("roleId") Integer roleId);
+
+
 }

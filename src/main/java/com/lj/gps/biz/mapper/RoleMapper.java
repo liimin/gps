@@ -1,19 +1,18 @@
 package com.lj.gps.biz.mapper;
 
 import com.lj.gps.biz.entity.Role;
-import com.lj.gps.biz.entity.User;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
 public interface RoleMapper {
-    int deleteByPrimaryKey(Long roleid);
+    int deleteByPrimaryKey(Integer roleid);
 
     int insert(Role record);
 
     int insertSelective(Role record);
 
-    Role selectByPrimaryKey(Long roleid);
+    Role selectByPrimaryKey(Integer roleid);
 
     int updateByPrimaryKeySelective(Role record);
 
@@ -31,5 +30,5 @@ public interface RoleMapper {
      * @param id
      */
     @Update("DELETE FROM  B_ROLE  where ROLEID = #{id}")
-    void remove(@Param(value = "id") Long id);
+    void remove(@Param(value = "id") Integer id);
 }

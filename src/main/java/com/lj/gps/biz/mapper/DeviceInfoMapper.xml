@@ -25,7 +25,7 @@
 
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.lj.gps.biz.entity.DeviceInfoKey" >
-    select
+    select 
     <include refid="Base_Column_List" />
     from T_DEVICE_INFO
     where ID = #{id,jdbcType=INTEGER}
@@ -40,9 +40,9 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into T_DEVICE_INFO (SN, VID, TYPE,
+    insert into T_DEVICE_INFO (SN, VID, TYPE, 
       CREATETIME, UPDATETIME)
-    values (#{sn,jdbcType=VARCHAR}, #{vid,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR},
+    values (#{sn,jdbcType=VARCHAR}, #{vid,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, 
       #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.lj.gps.biz.entity.DeviceInfo" >

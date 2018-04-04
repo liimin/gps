@@ -1,3 +1,4 @@
+<!--
 <template>
     <section class="chart-container">
         <el-row>
@@ -214,3 +215,4 @@
         padding: 30px 20px;
     }
 </style>
+-->

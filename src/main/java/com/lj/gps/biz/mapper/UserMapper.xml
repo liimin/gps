@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lj.gps.biz.mapper.UserMapper" >
   <resultMap id="BaseResultMap" type="com.lj.gps.biz.entity.User" >
-    <id column="USERID" property="userid" jdbcType="BIGINT" />
+    <id column="USERID" property="userid" jdbcType="INTEGER" />
     <result column="USERNAME" property="username" jdbcType="VARCHAR" />
     <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
     <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
@@ -12,7 +12,7 @@
     <result column="REMARK" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    USERID, USERNAME, PASSWORD, MOBILE, STATUS, CREATETIME,UPDATETIME, REMARK
+    USERID, USERNAME, PASSWORD, MOBILE, STATUS, CREATETIME, UPDATETIME, REMARK
   </sql>
 
 
@@ -25,7 +25,7 @@
     order by CREATETIME desc
   </select>
 
-  <select id="selectUserRoleRelationsByUserId" parameterType="java.lang.Long"
+  <select id="selectUserRoleRelationsByUserId" parameterType="java.lang.Integer"
           resultType="com.lj.gps.biz.model.UserRolesModel">
     SELECT
     o.USERID          AS userId,
@@ -35,30 +35,29 @@
     WHERE o.USERID = #{userId}
   </select>
 
-
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from B_USER
-    where USERID = #{userid,jdbcType=BIGINT}
+    where USERID = #{userid,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from B_USER
-    where USERID = #{userid,jdbcType=BIGINT}
+    where USERID = #{userid,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.lj.gps.biz.entity.User" >
     <selectKey resultType="java.lang.Integer" keyProperty="userid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into B_USER (USERNAME, PASSWORD, MOBILE, 
-      STATUS, CREATETIME,UPDATETIME, REMARK
-      )
+      STATUS, CREATETIME, UPDATETIME, 
+      REMARK)
     values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}
-      )
+      #{status,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lj.gps.biz.entity.User" >
-    <selectKey resultType="java.lang.Long" keyProperty="userid" order="AFTER" >
+    <selectKey resultType="java.lang.Integer" keyProperty="userid" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into B_USER
@@ -77,6 +76,9 @@
       </if>
       <if test="createtime != null" >
         CREATETIME,
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME,
       </if>
       <if test="remark != null" >
         REMARK,
@@ -97,6 +99,9 @@
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
@@ -121,11 +126,14 @@
       <if test="createtime != null" >
         CREATETIME = #{createtime,jdbcType=TIMESTAMP},
       </if>
+      <if test="updatetime != null" >
+        UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
       <if test="remark != null" >
         REMARK = #{remark,jdbcType=VARCHAR},
       </if>
     </set>
-    where USERID = #{userid,jdbcType=BIGINT}
+    where USERID = #{userid,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lj.gps.biz.entity.User" >
     update B_USER
@@ -136,6 +144,6 @@
       CREATETIME = #{createtime,jdbcType=TIMESTAMP},
       UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
       REMARK = #{remark,jdbcType=VARCHAR}
-    where USERID = #{userid,jdbcType=BIGINT}
+    where USERID = #{userid,jdbcType=INTEGER}
   </update>
 </mapper>

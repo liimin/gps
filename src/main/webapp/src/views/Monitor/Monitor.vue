@@ -7,7 +7,7 @@
                    v-bind:class="[ left ? 'switch-pull-left'  : 'switch-pull-right','switch']"
                    @click.native.prevent="click">
         </el-button>
-        <el-aside width="220px" v-bind:class="[ left ? 'pull-left'  : 'pull-right' ]" >
+        <el-aside width="220px" v-bind:class="[ left ? 'pull-left'  : 'pull-right']">
             <el-input
                     placeholder="输入关键字进行过滤"
                     v-model="filterText">
@@ -19,6 +19,7 @@
                     show-checkbox
                     default-expand-all
                     :filter-node-method="filterNode"
+                    @check-change="treeNodeCheckChange"
                     ref="devicetree">
             </el-tree>
         </el-aside>
@@ -42,6 +43,7 @@
                         :draggable="true"
                         @click="center=m.position"
                 ></gmap-marker>
+                <GmapPolyline v-if="curvedPath" :path="curvedPath" :options="gmapLineOptions"/>
             </gmap-map>
         </el-main>
     </el-container>
@@ -50,7 +52,7 @@
 <script>
     /////////////////////////////////////////
     // New in 0.4.0
-    import * as VueGoogleMaps from 'vue2-google-maps';
+    import * as VueGoogleMaps from 'vue2.1-google-maps';
     import Vue from 'vue';
 
     Vue.use(VueGoogleMaps, {
@@ -60,22 +62,23 @@
             // libraries: 'places', //// If you need to use place input
         }
     });
-    import { getDeviceList } from '../../api/api';
+    // 引入css，推荐将css放入main入口中引入一次即可。
+    import { getDeviceList,getRtBySn,getHisBySn } from '../../api/api';
     export default {
         watch: {
             filterText(val) {
                 this.$refs.devicetree.filter(val);
             },
-            fullHeight (val) {
+            containerHeight (val) {
                 if(!this.timer) {
-                    this.fullHeight = val
+                    this.containerHeight = val
                     this.timer = true
-                    let that = this
                     setTimeout(function (){
-                        that.timer = false
-                    },400)
+                        this.timer = false
+                    },400);
                 }
-            }
+            },
+
         },
         data() {
             return {
@@ -83,10 +86,11 @@
                 //map
                 center: {lat: 10.0, lng: 10.0},
                 markers: [{
-                    position: {lat: 10.0, lng: 10.0}
+                    position: {lat: 10.0, lng: 10.0},sn:'123456789028'
                 }, {
-                    position: {lat: 11.0, lng: 11.0}
+                    position: {lat: 11.0, lng: 11.0},sn:'222222'
                 }],
+                curvedPath:[{lat: 10.0, lng: 10.0},{lat: 11.0, lng: 11.0}],
                 //控制侧边栏
                 left: true,
                 //切换轨迹与实时
@@ -97,6 +101,12 @@
                 defaultProps: {
                     children: 'children',
                     label: 'label'
+                },
+                gmapLineOptions:{
+                    geodesic: true,
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2
                 }
             };
         },
@@ -108,6 +118,14 @@
                 if (!value) return true;
                 return data.label.indexOf(value) !== -1;
             },
+            treeNodeCheckChange(obj,isChecked,isChildChecked){
+                if(isChecked){
+                    this.getRT(obj.id);
+                }else{
+                    let _index=this.markers.findIndex(item => item.sn === obj.id);
+                    _index > -1 && this.markers.splice(_index, 1);
+                }
+            },
             //获取设备列表
             getDevices() {
                 let para = {
@@ -115,15 +133,28 @@
                     pageSize:10000
                 };
                 getDeviceList(para).then((res) => {
-                    let aDevices=res.data.data;
-                    let obj=null;
-                    for (let i = 0,j=aDevices.length; i <j ; i++) {
-                        obj=aDevices[i];
+                    for (let obj of res.data.data) {
                         this.deviceData.push({
                             id: obj.sn,
                             label: `SN  ${ obj.sn }`
                         });
                     }
+                });
+            },
+            getRT(sn) {
+                let para = {
+                    sn: sn
+                };
+                getRtBySn(para).then((res) => {
+                    console.log(res)
+                });
+            },
+            getHis(sn) {
+                let para = {
+                    sn: sn
+                };
+                getHisBySn(para).then((res) => {
+                    console.log(res)
                 });
             },
             computeHeight(){
@@ -136,18 +167,23 @@
             window.onresize = () => {
                 return this.computeHeight()
             }
+            this.getRT();
+            this.getHis();
         }
     }
 </script>
 <style scoped lang="scss">
+    @import '~scss_vars';
     $aside-width:220px;
     $container-height:600px;
     $switch-size:40px;
-    $animate-mode:.2s linear forwards;
+    $animate-mode:.2s ease forwards;
     $switch-left:200px;
-    $base-color:#545c64;
-    $border-style:1px solid $base-color;
+    $border-style:1px solid $color-primary;
 
+    .el-radio{
+        background-color: rgba(255,255,255,0.8);
+    }
     .device-tree{
         margin-top: 20px;
     }
@@ -183,8 +219,8 @@
             position: absolute;
             top: $container-height/2-20px;
             z-index: 819;
-            border-color: $base-color;
-            color: $base-color;
+            border-color: $color-primary;
+            color: $color-primary;
         }
     }
 

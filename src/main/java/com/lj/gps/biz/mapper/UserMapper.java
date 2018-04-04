@@ -5,17 +5,16 @@ import com.lj.gps.biz.model.UserRolesModel;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 
-import java.security.acl.LastOwnerException;
 import java.util.List;
 
 public interface UserMapper {
-    int deleteByPrimaryKey(Long userid);
+    int deleteByPrimaryKey(Integer userid);
 
     int insert(User record);
 
     int insertSelective(User record);
 
-    User selectByPrimaryKey(Long userid);
+    User selectByPrimaryKey(Integer userid);
 
     int updateByPrimaryKeySelective(User record);
 
@@ -29,7 +28,7 @@ public interface UserMapper {
      * @param userId
      * @return
      */
-    UserRolesModel selectUserRoleRelationsByUserId(Long userId);
+    UserRolesModel selectUserRoleRelationsByUserId(Integer userId);
 
     /**
      * 根据username获取用户

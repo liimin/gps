@@ -90,13 +90,10 @@
                     pageSize:this.pageSize
                 };
                 getDeviceList(para).then((res) => {
-                    var aDevices=res.data.data;
-                    var obj=null;
-                    for (let i = 0,j=aDevices.length; i <j ; i++) {
-                        obj=aDevices[i];
+                    for (let device of res.data.data) {
                         this.deviceData.push({
-                            key: obj.sn,
-                            label: `SN  ${ obj.sn }`
+                            key: device.sn,
+                            label: `SN  ${ device.sn }`
                         });
                     }
                 });

@@ -5,13 +5,13 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 
 public interface RoleDeviceMapper {
-    int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(RoleDevice record);
 
     int insertSelective(RoleDevice record);
 
-    RoleDevice selectByPrimaryKey(Long id);
+    RoleDevice selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(RoleDevice record);
 
@@ -23,5 +23,5 @@ public interface RoleDeviceMapper {
      * @param roleId
      */
     @Delete("DELETE FROM B_ROLE_DEVICE WHERE ROLEID = #{roleId}")
-    void deleteRelationsByRoleId(@Param("roleId") Long roleId);
+    void deleteRelationsByRoleId(@Param("roleId") Integer roleId);
 }

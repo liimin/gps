@@ -18,7 +18,7 @@
 <script>
     /////////////////////////////////////////
     // New in 0.4.0
-    import * as VueGoogleMaps from 'vue2-google-maps';
+    import * as VueGoogleMaps from 'vue2.1-google-maps';
     import Vue from 'vue';
 
     Vue.use(VueGoogleMaps, {
