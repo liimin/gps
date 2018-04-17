@@ -163,6 +163,34 @@
 		</dependency>
 
 
+		<!--Redis session 支持 b-->
+		<!--<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-data-redis</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>-->
+		<!--Redis session 支持 e-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+			<version>1.5.2.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.amap.api</groupId>
+			<artifactId>map2d</artifactId>
+			<version>5.2.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

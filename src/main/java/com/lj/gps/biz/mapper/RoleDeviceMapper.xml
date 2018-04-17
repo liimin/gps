@@ -9,6 +9,25 @@
   <sql id="Base_Column_List" >
     ID, ROLEID, SN
   </sql>
+
+  <select id ="selectAll"  resultType="com.lj.gps.biz.entity.RoleDevice"
+          parameterType="java.lang.String">
+    select * from B_ROLE_DEVICE where 1 = 1
+    <if test="roleIds != null and roleIds != '' and roleIds!= '10000' ">
+      and ROLEID in ( #{roleIds,jdbcType=VARCHAR} )
+    </if>
+    order by ID desc
+  </select>
+
+  <select id ="selectAllSns"  resultType="java.lang.String"
+          parameterType="java.lang.String">
+    select SN from B_ROLE_DEVICE where 1 = 1
+    <if test="roleIds != null and roleIds != '' and roleIds!= '10000' ">
+      and ROLEID in ( #{roleIds,jdbcType=VARCHAR} )
+    </if>
+    order by ID desc
+  </select>
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />

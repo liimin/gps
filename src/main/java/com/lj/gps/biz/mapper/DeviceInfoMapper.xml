@@ -15,7 +15,7 @@
 
 
   <select id ="selectAll"  resultType="com.lj.gps.biz.entity.DeviceInfo"
-          parameterType="com.lj.gps.biz.entity.User">
+          parameterType="com.lj.gps.biz.entity.DeviceInfo">
     select * from T_DEVICE_INFO where 1 = 1
     <if test="sn != null and sn != '' ">
       and SN = #{sn,jdbcType=VARCHAR}
@@ -23,6 +23,10 @@
     order by UPDATETIME desc
   </select>
 
+  <select id ="selectAllSns"  resultType="java.lang.String">
+    select SN from T_DEVICE_INFO
+    order by UPDATETIME desc
+  </select>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.lj.gps.biz.entity.DeviceInfoKey" >
     select 

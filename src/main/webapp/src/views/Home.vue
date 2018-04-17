@@ -83,7 +83,13 @@
 
 <script>
     import StarLine from '../components/public/StarLine.vue'
+    import store from '../vuex/store'
 	export default {
+        watch: {
+            'store.state.user'(val) {
+                console.log(val)
+            },
+        },
 		data() {
 			return {
 				sysName:'GPS',
@@ -120,7 +126,6 @@
 				this.$confirm('确认退出吗?', '提示', {
 					//type: 'warning'
 				}).then(() => {
-					sessionStorage.removeItem('user');
                     this.$router.push('/login');
 				}).catch(() => {
 
@@ -141,15 +146,14 @@
 			}
 		},
 		mounted() {
-			var user = sessionStorage.getItem('user');
+			var user = store.getters.user;
 			if (user) {
 				user = JSON.parse(user);
 				this.sysUserName = user.username || '';
-				this.sysUserAvatar = user.avatar || 'https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png';
+				this.sysUserAvatar = user.avatar || '../../static/user.png';
 			}
 		}
 	}
-
 </script>
 
 <style scoped lang="scss">

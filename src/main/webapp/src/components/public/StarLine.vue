@@ -35,7 +35,8 @@
                     this.drawCircle(this.arr[i].x,this.arr[i].y);
                 }
                 canvas.style.display="block";
-                canvas.style.background=this.$store.state.color;
+                canvas.style.background="#333";
+                canvas.style.overflow="hidden";
                 document.body.appendChild(canvas);
                 document.body.style.background = "url('"+canvas.toDataURL()+"')";
             },

@@ -21,6 +21,7 @@
   import { requestLogin } from '../api/api';
   import StarLine from '../components/public/StarLine.vue'
   import { mapGetters } from 'vuex'
+  import store from '@/vuex/store';
   export default {
       computed: {...mapGetters(['sending'])},
     data() {
@@ -60,8 +61,10 @@
                   type: 'error'
                 });
               } else {
-                sessionStorage.setItem('user', JSON.stringify(data));
-                this.$router.push({ path: '/user' });
+                //sessionStorage.setItem('user', JSON.stringify(data));
+                store.commit('SET_TOKEN',message);
+                store.commit('SET_USER',JSON.stringify(data));
+                this.$router.push({ path: '/main' });
               }
             });
           } else {
@@ -72,7 +75,7 @@
       }
     },
       components: {
-          //StarLine
+          StarLine
       }
   }
 

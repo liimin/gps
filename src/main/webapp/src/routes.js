@@ -15,6 +15,13 @@ import Google from './components/nav2/Google.vue'
 import RoleEdit from './views/Role/RoleEdit.vue'
 import RoleAdd from './views/Role/RoleAdd.vue'
 import Monitor from './views/Monitor/Monitor.vue'
+
+import store from './vuex/store'
+import VueRouter from 'vue-router'
+import Vuex from 'vuex'
+import Vue from 'vue'
+Vue.use(VueRouter)
+Vue.use(Vuex)
 let routes = [
     {
         path: '/login',
@@ -33,9 +40,28 @@ let routes = [
         path: '/',
         component: Home,
         name: 'HOME',
+        leaf: true,//只有一个节点
         iconCls: 'fa fa-home',//图标样式class
         children: [
-            { path: '/main', component: Main, name: '主页'},
+            { path: '/main', component: Main, name: 'Main'},
+        ]
+    },
+    {
+        path: '/',
+        component: Home,
+        name: 'OTHERS',
+        iconCls: 'fa fa-map-marker',
+        leaf: true,//只有一个节点
+        children: [
+            { path: '/monitor', component: Monitor, name: 'Monitor',iconCls:'el-icon-message' },
+            /*{ path: '/page6', component: Page6, name: '导航三' },*/
+            { path: '/table', component: Table, name: 'Table',hidden: true  },
+            { path: '/form', component: Form, name: 'Form' ,hidden: true  },
+            { path: '/page4', component: Page4, name: '页面4' ,hidden: true  },
+            { path: '/amap', component: AMap, name: 'AMap',iconCls:'el-icon-message' ,hidden: true  },
+            { path: '/google', component: Google, name: 'Google',iconCls:'el-icon-message',hidden: true   },
+
+            /*{ path: '/bing', component: Bing, name: 'Bing',iconCls:'el-icon-message' }*/
         ]
     },
     {
@@ -54,23 +80,7 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: 'OTHERS',
-        iconCls: 'fa fa-address-card',
-        //leaf: true,//只有一个节点
-        children: [
-            /*{ path: '/page6', component: Page6, name: '导航三' },*/
-            { path: '/table', component: Table, name: 'Table' },
-            { path: '/form', component: Form, name: 'Form' },
-            { path: '/page4', component: Page4, name: '页面4' },
-            { path: '/amap', component: AMap, name: 'AMap',iconCls:'el-icon-message' },
-            { path: '/google', component: Google, name: 'Google',iconCls:'el-icon-message' },
-            { path: '/monitor', component: Monitor, name: 'Monitor',iconCls:'el-icon-message' },
-            /*{ path: '/bing', component: Bing, name: 'Bing',iconCls:'el-icon-message' }*/
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
+        hidden: true,
         name: 'Charts',
         iconCls: 'fa fa-bar-chart',
         children: [
@@ -83,5 +93,24 @@ let routes = [
         redirect: { path: '/404' }
     }
 ];
+const router = new VueRouter({
+    mode:'history',
+    routes
+})
+router.beforeEach((to, from, next) => {
+    //NProgress.start();
+    if (to.path == '/login') {
+        store.commit('SET_USER',null);
+    }
+    let user = store.getters.user;
+    if (!user && to.path != '/login') {
+        next({ path: '/login' })
+    } else {
+        next()
+    }
+})
 
-export default routes;
+router.afterEach(transition => {
+    //NProgress.done();
+});
+export default router;

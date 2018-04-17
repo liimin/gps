@@ -63,6 +63,8 @@
                 });
               } else {
                 sessionStorage.setItem('user', JSON.stringify(data));
+                sessionStorage.setItem('token',message);
+                console.log(message);
                 this.$router.push({ path: '/user' });
               }
             });

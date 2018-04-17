@@ -4,8 +4,10 @@ package com.lj.gps.biz;
 import com.google.code.kaptcha.Producer;
 import com.lj.gps.base.BaseController;
 import com.lj.gps.base.BaseQueryVo;
+import com.lj.gps.base.ResultCode;
 import com.lj.gps.base.ResultEntity;
 import com.lj.gps.biz.entity.User;
+import com.lj.gps.biz.service.RedisService;
 import com.lj.gps.frame.common.Constants;
 import com.lj.gps.frame.common.ResultCodeConstants;
 import com.lj.gps.frame.config.StaticProperty;
@@ -32,16 +34,23 @@ class IndexController extends BaseController {
     @Autowired
     private Producer captchaProducer;
 
+    @Autowired
+    private RedisService redisService;
+
     @GetMapping( { "/" } )
     public String index(Map<String, Object> model) {
         //model.put("cdnPath", staticProperty.getResource());
         return "index";
     }
 
-    @GetMapping("/login")
-    public String login(Map<String, Object> model) {
-        ///model.put("cdnPath", staticProperty.getResource());
-        return "login";
+    @RequestMapping("/login")
+    @ResponseBody
+    public ResultEntity login(Map<String, Object> model) {
+        ResultEntity resultEntity = new ResultEntity();
+        ErrorMsgUtils.createErrorMsg(resultEntity, ResultCodeConstants.USERNAME_EXISTED);
+        resultEntity.setReturnCode(ResultCode.SESSION_OUT);
+        resultEntity.setMessage("Session out!");
+        return resultEntity;
     }
 
     /**
@@ -62,7 +71,8 @@ class IndexController extends BaseController {
             ErrorMsgUtils.createErrorMsg(resultEntity, ResultCodeConstants.PASSWORD_ERROR);
         } else {
             resultEntity.setData(user);
-            session.setAttribute(Constants.SESSION_LOGIN_USER, user);
+            redisService.set(session.getId(),user,60*60*2);
+            resultEntity.setMessage(session.getId());
         }
         return resultEntity;
     }

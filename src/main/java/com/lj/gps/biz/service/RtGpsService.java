@@ -4,6 +4,7 @@ import com.lj.gps.biz.entity.DeviceInfo;
 import com.lj.gps.biz.entity.RtGps;
 import com.lj.gps.biz.mapper.DeviceInfoMapper;
 import com.lj.gps.biz.mapper.RtGpsMapper;
+import com.lj.gps.frame.utils.GPSUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,12 @@ public class RtGpsService {
      * @return
      */
     public RtGps selectBySn(String sn){
-        return rtGpsMapper.selectByPrimaryKey(sn);
+        RtGps rgps=rtGpsMapper.selectByPrimaryKey(sn);
+       /* double lat=rgps.getLatitude()/1000000;
+        double lng=rgps.getLongitude()/1000000;
+        double latLng[]= GPSUtil.gpsToGoogle(lat,lng);
+        rgps.setAlat(latLng[0]);
+        rgps.setAlng(latLng[1]);*/
+        return rgps;
     }
 }

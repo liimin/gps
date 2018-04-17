@@ -19,4 +19,6 @@ public interface DeviceInfoMapper {
     int updateByPrimaryKey(DeviceInfo record);
 
     List<DeviceInfo> selectAll(DeviceInfo di);
+
+    List<String> selectAllSns();
 }

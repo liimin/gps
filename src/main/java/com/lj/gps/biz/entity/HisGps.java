@@ -1,5 +1,6 @@
 package com.lj.gps.biz.entity;
 
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -27,6 +28,12 @@ public class HisGps implements Serializable {
     private Date createtime;
 
     private Date updatetime;
+
+    @Transient
+    private Double alat;
+
+    @Transient
+    private Double alng;
 
     private static final long serialVersionUID = 1L;
 
@@ -124,5 +131,21 @@ public class HisGps implements Serializable {
 
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
+    }
+
+    public Double getAlng() {
+        return alng;
+    }
+
+    public void setAlng(Double alng) {
+        this.alng = alng;
+    }
+
+    public Double getAlat() {
+        return alat;
+    }
+
+    public void setAlat(Double alat) {
+        this.alat = alat;
     }
 }

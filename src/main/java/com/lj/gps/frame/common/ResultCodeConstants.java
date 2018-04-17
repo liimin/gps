@@ -133,28 +133,8 @@ public final class ResultCodeConstants extends ResultCode {
      */
     public static final String NAME_EXISTS = "9006";
 
-    /**
-     * 约定已经存在
-     */
-    public static final String PROMISE_NAME_EXISTS = "9007";
-
-    /** 没有符合的工单信息   */
-    public static final String WORDORDER_NO_EXISTS = "9008";
-
     /** 设备已激活   */
     public static final String MAINTRACK_ISACTIVE = "9009";
-
-
-    /** 有相同的姓名和车架号   */
-    public static final String EXIST_NAMEANDSTANDNO = "9010";
-
-
-    /** 有相同的车牌号   */
-    public static final String EXIST_IDNUM = "9011";
-
-
-    /** 有相同的发动机号   */
-    public static final String EXIST_ENGIN = "9012";
 
     /**
      * 错误消息描述
@@ -181,15 +161,9 @@ public final class ResultCodeConstants extends ResultCode {
         ERRORMSG_MAP.put(CHECK_CODE_OVER_TIME, "验证码已过期");
         ERRORMSG_MAP.put(CHECK_CODE_TOO_FAST, "验证码发送太频繁，请稍后重试！");
 
-        ERRORMSG_MAP.put(USER_GROUP_NAME_EXISTED, "用户组已经存在");
         ERRORMSG_MAP.put(USERNAME_EXISTED, "用户已经存在");
         ERRORMSG_MAP.put(ROLE_NAME_EXISTED, "角色已经存在");
         ERRORMSG_MAP.put(NAME_EXISTS, "名称已存在");
-        ERRORMSG_MAP.put(WORDORDER_NO_EXISTS, "没有符合的工单信息");
-        ERRORMSG_MAP.put(PROMISE_NAME_EXISTS, "约定已经存在");
-        ERRORMSG_MAP.put(EXIST_ENGIN, "有相同的发动机号");
-        ERRORMSG_MAP.put(EXIST_IDNUM, "有相同的车牌号");
-        ERRORMSG_MAP.put(EXIST_NAMEANDSTANDNO, "有相同的姓名和车架号");
         ERRORMSG_MAP.put(MAINTRACK_ISACTIVE, "设备已激活");
     }
 

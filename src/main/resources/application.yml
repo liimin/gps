@@ -24,6 +24,11 @@ spring:
         testOnReturn: false
         poolPreparedStatements: true
         maxOpenPreparedStatements: 20
+   # session:
+      #  store-type: REDIS
+   # redis:
+      #  host: localhost
+      #  port: 8091
 
 mybatis:
   mapper-locations: classpath:mapping/*.xml
@@ -35,3 +40,18 @@ pagehelper:
     reasonable: true
     supportMethodsArguments: true
     params: count=countSql
+
+redis:
+    host: 127.0.0.1
+    port: 6379
+    timeout: 0
+    database: 0
+    pool:
+      max-active: 8
+      max-wait: -1
+      max-idle: 8
+      min-idle: 0
+# 打印sql
+logging:
+  level:
+    com.lj.gps.biz.mapper: DEBUG

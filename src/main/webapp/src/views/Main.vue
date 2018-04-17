@@ -2,7 +2,7 @@
 	<el-container>
 		<el-header>
 			<el-row>
-				<el-col :span="8" v-for="data in datas" :key="data">
+				<el-col :span="8" v-for="data in datas" :key="data.value">
 					<el-card class="box-card">
 						<div slot="header" class="clearfix">
 							<span><i v-bind:class="data.icon" aria-hidden="true"></i>&nbsp;{{data.title}}</span>
@@ -16,19 +16,19 @@
 			</el-row>
 		</el-header>
 		<el-main>
-			<!--<chart
-				:options="pie"
-				:init-options="initOptions"
-				auto-resize
-			/>-->
+			<chart :options="chartOptions" />
 		</el-main>
 	</el-container>
 </template>
 
 <style scoped lang="scss">
 	@import '~scss_vars';
+	.el-main{
+		margin-top: 110px;
+	}
 	.echarts {
 		height: 500px;
+		width: 100%;
 	}
 	.data-value {
 		font:italic bold 60px/60px arial,sans-serif;
@@ -54,91 +54,130 @@
     import 'echarts/lib/chart/line'
     import 'echarts/lib/chart/pie'
     import 'echarts/lib/component/tooltip'
-    import 'echarts/lib/component/polar'
-    import pie from '../mock/data/main/pie'
+    import 'echarts/lib/component/legend'
+    import 'echarts/lib/component/title'
     // 注册组件后即可使用
     Vue.component('chart', ECharts)
+
+
+    import { getDeviceStatics } from '../api/api';
     export default {
-        data: function () {
+        data() {
             return {
                 datas:[
-					{title:'总数',value:'88888888',icon:"fa fa-users" },
-                    {title:'在线数',value:'55555588',icon:"fa fa-toggle-on"},
-                    {title:'离线数',value:'33333300',icon:"fa fa-toggle-off"}
+					{title:'总数',value:'0',icon:"fa fa-users" },
+                    {title:'在线数',value:'0',icon:"fa fa-toggle-on"},
+                    {title:'离线数',value:'0',icon:"fa fa-toggle-off"}
 				],
-                initOptions: {
-                    //renderer: options.renderer || 'canvas'
-                },
-				pie:{
-                    backgroundColor: '#fff',
+				count:1,
+				chartOptions:{
                     title: {
-                        text: 'Customized Pie',
-                        left: 'center',
-                        top: 20,
-                        textStyle: {
-                            color: '#ccc'
-                        }
+                        text: '动态数据',
+                        subtext: '纯属虚构',
                     },
-
-                    tooltip : {
-                        trigger: 'item',
-                        formatter: "{a} <br/>{b} : {c} ({d}%)"
-                    },
-
-                    visualMap: {
-                        show: false,
-                        min: 80,
-                        max: 600,
-                        inRange: {
-                            colorLightness: [0, 1]
-                        }
-                    },
-                    series : [
-                        {
-                            name:'访问来源',
-                            type:'pie',
-                            radius : '55%',
-                            center: ['50%', '50%'],
-                            data:[
-                                {value:335, name:'直接访问'},
-                                {value:310, name:'邮件营销'},
-                            ].sort(function (a, b) { return a.value - b.value; }),
-                            roseType: 'radius',
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
                             label: {
-                                normal: {
-                                    textStyle: {
-                                        color: 'rgba(255, 255, 255, 0.3)'
-                                    }
-                                }
-                            },
-                            labelLine: {
-                                normal: {
-                                    lineStyle: {
-                                        color: 'rgba(255, 255, 255, 0.3)'
-                                    },
-                                    smooth: 0.2,
-                                    length: 10,
-                                    length2: 20
-                                }
-                            },
-                            itemStyle: {
-                                normal: {
-                                    color: '#c23531',
-                                    /*shadowBlur: 200,
-                                    shadowColor: 'rgba(0, 0, 0, 0.5)'*/
-                                }
-                            },
-
-                            animationType: 'scale',
-                            animationEasing: 'elasticOut',
-                            animationDelay: function (idx) {
-                                return Math.random() * 200;
+                                backgroundColor: '#283b56'
                             }
+                        }
+                    },
+                    legend: {
+                        data:['最新成交价', '预购队列'],
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataView: {readOnly: false},
+                            restore: {},
+                            saveAsImage: {}
+                        }
+                    },
+                    dataZoom: {
+                        show: false,
+                        start: 0,
+                        end: 100
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: true,
+                            data:[]
+                        },
+                        {
+                            type: 'category',
+                            boundaryGap: true,
+                            data: []
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            min: 0,
+                            scale: true,
+                            name: '价格',
+                           /* max: 30,*/
+                            boundaryGap: [0.2, 0.2]
+                        },
+                        {
+                            type: 'value',
+                            scale: true,
+                            name: '预购量',
+                           /* max: 1200,*/
+                            min: 0,
+                            boundaryGap: [0.2, 0.2]
+                        }
+                    ],
+                    series: [
+                        {
+                            name:'预购队列',
+                            type:'bar',
+                            xAxisIndex: 1,
+                            yAxisIndex: 1,
+                            data:[]
+                        },
+                        {
+                            name:'最新成交价',
+                            type:'line',
+                            data:[]
                         }
                     ]
 				}
             }
-        },mounted () {
+        },
+		methods:{
+            creatData(){
+				let axisData = (new Date()).toLocaleTimeString().replace(/^\D*/,'');
+				let data0 = this.chartOptions.series[0].data;
+				let data1 = this.chartOptions.series[1].data;
+				let xAxis0= this.chartOptions.xAxis[0].data;
+				let xAxis1= this.chartOptions.xAxis[1].data;
+				if( this.count > 12){
+					data0.shift();
+					data1.shift();
+					xAxis0.shift();
+					xAxis1.shift();
+				}
+				data0.push(Math.round(Math.random() * 1000));
+				data1.push((Math.random() * 10 + 5).toFixed(1) - 0);
+				xAxis0.push(axisData);
+				xAxis1.push(this.count++);
+			},
+            getDeviceStatics(){
+                getDeviceStatics({}).then((res) => {
+                    let {total, online ,offline }=res.data.data;
+                    this.datas[0].value=total;
+                    this.datas[1].value=online;
+                    this.datas[2].value=offline;
+                });
+			}
+		},
+		mounted () {
+            this.creatData();
+            this.getDeviceStatics();
+            setInterval(this.creatData, 2100);
         }
     }
 </script>

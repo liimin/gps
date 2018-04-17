@@ -38,6 +38,7 @@ public class UserController extends BaseController {
     @RequestMapping("/getUserList")
     @ResponseBody
     public ResponseEntity<User> getUserList(Pagination pagination, User user) {
+        User u=getUser();
         PageHelper.startPage(pagination.getCurrentPage(), pagination.getPageSize(), true);
         List<User> uList = userService.getUserList(user);
         ResponseEntity<User> responseObject = new ResponseEntity<>();

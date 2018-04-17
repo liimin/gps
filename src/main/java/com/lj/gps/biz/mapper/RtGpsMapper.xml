@@ -3,7 +3,6 @@
 <mapper namespace="com.lj.gps.biz.mapper.RtGpsMapper" >
   <resultMap id="BaseResultMap" type="com.lj.gps.biz.entity.RtGps" >
     <id column="SN" property="sn" jdbcType="VARCHAR" />
-    <result column="VID" property="vid" jdbcType="INTEGER" />
     <result column="WE" property="we" jdbcType="INTEGER" />
     <result column="LONGITUDE" property="longitude" jdbcType="INTEGER" />
     <result column="NS" property="ns" jdbcType="INTEGER" />
@@ -17,7 +16,7 @@
     <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    SN, VID, WE, LONGITUDE, NS, LATITUDE, GPSTIME, ALTITUDE, SPEED, DIRECT, NUMBER, CREATETIME, 
+    SN, WE, LONGITUDE, NS, LATITUDE, GPSTIME, ALTITUDE, SPEED, DIRECT, NUMBER, CREATETIME, 
     UPDATETIME
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -31,29 +30,24 @@
     where SN = #{sn,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.lj.gps.biz.entity.RtGps" >
-    <selectKey resultType="java.lang.Integer" keyProperty="vid" order="AFTER" >
+    <selectKey resultType="java.lang.String" keyProperty="sn" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into T_RT_GPS (SN, WE, LONGITUDE, 
-      NS, LATITUDE, GPSTIME, 
-      ALTITUDE, SPEED, DIRECT, 
-      NUMBER, CREATETIME, UPDATETIME
-      )
-    values (#{sn,jdbcType=VARCHAR}, #{we,jdbcType=INTEGER}, #{longitude,jdbcType=INTEGER}, 
-      #{ns,jdbcType=INTEGER}, #{latitude,jdbcType=INTEGER}, #{gpstime,jdbcType=TIMESTAMP}, 
-      #{altitude,jdbcType=INTEGER}, #{speed,jdbcType=INTEGER}, #{direct,jdbcType=INTEGER}, 
-      #{number,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}
-      )
+    insert into T_RT_GPS (WE, LONGITUDE, NS, 
+      LATITUDE, GPSTIME, ALTITUDE, 
+      SPEED, DIRECT, NUMBER, 
+      CREATETIME, UPDATETIME)
+    values (#{we,jdbcType=INTEGER}, #{longitude,jdbcType=INTEGER}, #{ns,jdbcType=INTEGER}, 
+      #{latitude,jdbcType=INTEGER}, #{gpstime,jdbcType=TIMESTAMP}, #{altitude,jdbcType=INTEGER}, 
+      #{speed,jdbcType=INTEGER}, #{direct,jdbcType=INTEGER}, #{number,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.lj.gps.biz.entity.RtGps" >
-    <selectKey resultType="java.lang.Integer" keyProperty="vid" order="AFTER" >
+    <selectKey resultType="java.lang.String" keyProperty="sn" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into T_RT_GPS
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="sn != null" >
-        SN,
-      </if>
       <if test="we != null" >
         WE,
       </if>
@@ -89,9 +83,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="sn != null" >
-        #{sn,jdbcType=VARCHAR},
-      </if>
       <if test="we != null" >
         #{we,jdbcType=INTEGER},
       </if>
@@ -130,9 +121,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.lj.gps.biz.entity.RtGps" >
     update T_RT_GPS
     <set >
-      <if test="vid != null" >
-        VID = #{vid,jdbcType=INTEGER},
-      </if>
       <if test="we != null" >
         WE = #{we,jdbcType=INTEGER},
       </if>
@@ -171,8 +159,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lj.gps.biz.entity.RtGps" >
     update T_RT_GPS
-    set VID = #{vid,jdbcType=INTEGER},
-      WE = #{we,jdbcType=INTEGER},
+    set WE = #{we,jdbcType=INTEGER},
       LONGITUDE = #{longitude,jdbcType=INTEGER},
       NS = #{ns,jdbcType=INTEGER},
       LATITUDE = #{latitude,jdbcType=INTEGER},

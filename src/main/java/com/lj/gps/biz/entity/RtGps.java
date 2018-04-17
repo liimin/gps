@@ -1,12 +1,11 @@
 package com.lj.gps.biz.entity;
 
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
 
 public class RtGps implements Serializable {
     private String sn;
-
-    private Integer vid;
 
     private Integer we;
 
@@ -30,6 +29,12 @@ public class RtGps implements Serializable {
 
     private Date updatetime;
 
+    @Transient
+    private Double alat;
+
+    @Transient
+    private Double alng;
+
     private static final long serialVersionUID = 1L;
 
     public String getSn() {
@@ -38,14 +43,6 @@ public class RtGps implements Serializable {
 
     public void setSn(String sn) {
         this.sn = sn == null ? null : sn.trim();
-    }
-
-    public Integer getVid() {
-        return vid;
-    }
-
-    public void setVid(Integer vid) {
-        this.vid = vid;
     }
 
     public Integer getWe() {
@@ -134,5 +131,21 @@ public class RtGps implements Serializable {
 
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
+    }
+
+    public Double getAlng() {
+        return alng;
+    }
+
+    public void setAlng(Double alng) {
+        this.alng = alng;
+    }
+
+    public Double getAlat() {
+        return alat;
+    }
+
+    public void setAlat(Double alat) {
+        this.alat = alat;
     }
 }

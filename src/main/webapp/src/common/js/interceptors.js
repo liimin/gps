@@ -4,10 +4,12 @@ import { Loading, Message } from 'element-ui'
 import qs from 'qs';
 import store from '@/vuex/store';
 import NProgress from 'nprogress';
+import Vue from 'vue'
 // 超时时间
 axios.defaults.timeout = 5000;
 // http请求拦截器
 var loadinginstace;
+import router from '../../routes'
 var process={
     begin(){
         NProgress.start();
@@ -27,9 +29,9 @@ axios.interceptors.request.use(config => {
     //store.commit('SET_TABLE_LOADING',true);
     // element ui Loading方法
     //loadinginstace = Loading.service({ fullscreen: true });
-    /*if (store.state.token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
-        config.headers.Authorization = `token ${store.state.token}`;
-    }*/
+    if (store.getters.token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
+        config.headers.Authorization = `${store.getters.token}`;
+    }
     if(config.data)
     config.data=qs.stringify(config.data);
     return config
@@ -47,6 +49,11 @@ axios.interceptors.response.use(response  => {// 响应成功关闭loading
     process.end();
     if(response.data){
         if( response.data.returnCode !='0'  && typeof response.data.returnCode!='undefined'){
+            if(response.data.returnCode ==='-1003'){
+                router.replace({
+                    path: 'login',
+                })
+            }
             Message.error({
                 message: response.data.message||'加载失败'
             });
@@ -54,8 +61,8 @@ axios.interceptors.response.use(response  => {// 响应成功关闭loading
         }else if( response.data.draw){
             throw response.data;
         }
+        return response
     }
-    return response
 }, error => {
     process.end();
     //loadinginstace.close();
@@ -66,11 +73,7 @@ axios.interceptors.response.use(response  => {// 响应成功关闭loading
         switch (error.response.status) {
             case 401:
                 // 返回 401 清除token信息并跳转到登录页面
-                //store.commit(types.LOGOUT);
-                router.replace({
-                    path: 'login',
-                    query: {redirect: router.currentRoute.fullPath}
-                })
+                store.commit('SET_USER',null);
         }
     }
     return Promise.reject(error)   // 返回接口返回的错误信息

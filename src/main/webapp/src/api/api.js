@@ -33,3 +33,6 @@ export const getDeviceList = params => { return axios.post(`${base}/device/getDe
 //gps
 export const getRtBySn = params => { return axios.post(`${base}/track/getRtBySn`, params); };
 export const getHisBySn = params => { return axios.post(`${base}/track/getHisBySn`, params); };
+
+//statics
+export const getDeviceStatics = params => { return axios.post(`${base}/statics/getDeviceStatics`, params); };
