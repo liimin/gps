@@ -80,8 +80,17 @@
                     height="120"
                     @click.native.prevent="foot">
                 <el-table-column prop="sn" label="SN" ></el-table-column>
-                <el-table-column prop="longitude" label="LONGITUDE" ></el-table-column>
-                <el-table-column prop="latitude" label="LATITUDE" > </el-table-column>
+                <el-table-column prop="address" label="ADDRESS" width="460">
+                    <template slot-scope="scope">
+                        <el-popover trigger="hover" placement="top">
+                            <p>LATITUDE: {{ scope.row.latitude }}</p>
+                            <p>LONGITUDE: {{ scope.row.longitude }}</p>
+                            <div slot="reference" class="name-wrapper">
+                                <el-tag size="medium">{{ scope.row.address }}</el-tag>
+                            </div>
+                        </el-popover>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="gpstime" label="GPSTIME" > </el-table-column>
                 <el-table-column prop="speed" label="SPEED" > </el-table-column>
             </el-table>
@@ -92,11 +101,27 @@
                     height="120"
                     @click.native.prevent="foot">
                 <el-table-column prop="sn" label="SN" ></el-table-column>
-                <el-table-column prop="longitude" label="LONGITUDE" ></el-table-column>
-                <el-table-column prop="latitude" label="LATITUDE" > </el-table-column>
+                <el-table-column prop="address" label="ADDRESS" width="460">
+                    <template slot-scope="scope">
+                        <el-popover trigger="hover" placement="top">
+                            <p>LATITUDE: {{ scope.row.latitude }}</p>
+                            <p>LONGITUDE: {{ scope.row.longitude }}</p>
+                            <div slot="reference" class="name-wrapper">
+                                <el-tag size="medium">{{ scope.row.address }}</el-tag>
+                            </div>
+                        </el-popover>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="gpstime" label="GPSTIME" > </el-table-column>
                 <el-table-column prop="speed" label="SPEED" > </el-table-column>
+                <div slot="append">
+                    <el-button  @click.native.prevent="loadMore" class="loadmore" >load more...
+                    </el-button>
+                    <el-button  @click.native.prevent="loadAll" class="loadmore" >load all...
+                    </el-button>
+                </div>
             </el-table>
+
         </div>
         </el-container>
     </el-container>
@@ -128,12 +153,15 @@
         // 高德的key
         key: 'bd290dc27d0945959280753215ddda71',
         // 插件集合
-        plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor'],
+        plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor','Geocoder'],
         // 高德 sdk 版本，默认为 1.4.4
         v: '1.4.5'
     });
     // 引入css，推荐将css放入main入口中引入一次即可。
     import { getDeviceList,getRtBySn,getHisBySn } from '../../api/api';
+    import infiniteScroll from 'vue-infinite-scroll'
+    Vue.use(infiniteScroll)
+
     export default {
         watch: {
             filterText(val) {
@@ -154,7 +182,6 @@
             'hisTimerange'(value) {
                 let begin=moment(value[0]).format("YYYY-MM-DD HH:mm:ss");
                 let end=moment(value[0]).format("YYYY-MM-DD HH:mm:ss");
-                console.log(begin,end)
             },
             'mode'(value) {
                 if(value==2){
@@ -171,7 +198,7 @@
                 containerHeight: 500,
                 //控制侧边栏
                 left: true,
-                up:false,
+                up:true,
                 //切换轨迹与实时
                 mode:'1',
                 map:amap,
@@ -186,10 +213,29 @@
                 mapOptions:{
                     markers: [],
                     polyline:[]
-                }
+                },
+                busy:false,
+                temPolyline:[],
+                pageSize:10,
+                page:1
             };
         },
         methods: {
+            loadMore: function() {
+                this.page++;
+                let list= this.temPolyline.filter((u, index) => index < this.pageSize * this.page && index >= this.pageSize * (this.page - 1));
+                this.tableHisInfo.push.apply(this.tableHisInfo,list);
+            },
+            loadAll: function() {
+                while (1){
+                    this.page++;
+                    let list= this.temPolyline.filter((u, index) => index < this.pageSize * this.page && index >= this.pageSize * (this.page - 1));
+                    if(!list ||!list.length){
+                        break;
+                    }
+                    this.tableHisInfo.push.apply(this.tableHisInfo,list);
+                }
+            },
             mapChange(){
                 this.map = this.map.name==='amap'? gmap : amap;
             },
@@ -197,7 +243,7 @@
                 this.left = !this.left;
             },
             foot(){
-                this.up =!this.up;
+                //this.up =!this.up;
             },
             filterNode(value, data) {
                 if (!value) return true;
@@ -280,7 +326,9 @@
             pushPolyLine(data){
                 let lines=this.map.formatPolyLines(data);
                 this.mapOptions.polyline=lines.polylines;
-                this.tableHisInfo=lines.data;
+                this.temPolyline=lines.data;
+                this.tableHisInfo=
+                    this.temPolyline.filter((u, index) => index < this.pageSize * this.page && index >= this.pageSize * (this.page - 1));
             },
 
             removePolyline(){
@@ -550,6 +598,22 @@
         }
         .el-table--enable-row-hover .el-table__body tr:hover>td{
             background-color:rgba(84,92,100,.5);
+        }
+        .el-table__append-wrapper{
+            text-align: center;
+            .loadmore{
+                color:#fff;
+                background-color: #666;
+                padding: 2px 3px;
+                border: 0;
+                color: #fff;
+                font-size: 14px;
+                font-weight: bold;
+            }
+        }
+        .el-tag{
+            color: #fff;
+            background-color: rgba(0,0,0,.3);
         }
     },
     .device-info-wrap:after{
